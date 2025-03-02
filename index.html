@@ -1,182 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Info</title>
+    <title>Forward Video</title>
     <style>
         body {
             font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
         }
 
-        .container {
-            max-width: 350px;
-            margin: 10px auto;
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        img {
-            display: block;
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        iframe {
-            display: block;
-            width: 100%;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: green;
+        #forwardButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0088cc;
             color: white;
             border: none;
-            border-radius: 5px;
-            margin-bottom: 10px;
             cursor: pointer;
-        }
-
-        .info-section {
-            background-color: #e0f7fa;
-            padding: 10px;
             border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
         }
 
-        .info-section h4 {
-            margin: 0;
-            color: #006064;
-        }
-
-        .info-section pre {
-            white-space: pre-wrap;
-            text-align: left;
-            margin: 5px 0;
-            font-size: 14px;
-        }
-
-        ol {
-            padding-left: 20px;
-            margin-bottom: 10px;
-        }
-
-        .screenshot-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-
-        .screenshot-grid img {
-            width: 100%;
-            height: auto;
-            border-radius: 3px;
+        #message {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <script>
-            window.onload = function() {
-                let tg = window.Telegram.WebApp;
-                tg.ready();
-            };
-        </script>
+    <h1>Forward Video</h1>
+    <button id="forwardButton">Forward</button>
+    <div id="message"></div>
 
-        <script type="text/javascript">
-            atOptions = {
-                'key': 'a596e3d2b4c5bde3a6c954344fe9a15d',
-                'format': 'iframe',
-                'height': 50,
-                'width': 320,
-                'params': {}
-            };
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/a596e3d2b4c5bde3a6c954344fe9a15d/invoke.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const forwardButton = document.getElementById('forwardButton');
+        const messageDiv = document.getElementById('message');
 
-        <img loading="lazy" src="6.jpg" alt="Movie Poster">
+        forwardButton.addEventListener('click', () => {
+            const data = Telegram.WebApp.initDataUnsafe;
+            const parsedData = JSON.parse(data.web_app_data);
 
-        <div class="info-section">
-            <span style="font-weight: bolder; font-size: large; background-color: rgb(241, 140, 103);">SUNRAY FALLEN SOLDIER MOVIE</span>
-        </div>
+            Telegram.WebApp.sendData(JSON.stringify({
+                userId: parsedData.userId,
+                videoId: parsedData.videoId,
+                qualityChannelId: parsedData.qualityChannelId,
+            }));
 
-        <iframe loading="eager" src="https://moviehub24.github.io/ads/" scrolling="no" height="300px"></iframe>
+            messageDiv.textContent = 'Forward request sent!';
 
-        <div class="info-section">
-            <h4>Movie Info:-</h4>
-            <pre>
-IMDB Rating:-8.0/10
-Movie:-
-Language:Hindi+English 
-Quality:-480p||720p||1080p
-Format:Mkv
-            </pre>
-        </div>
+            // Optional: Disable the button after click
+            forwardButton.disabled = true;
+        });
 
-        <iframe loading="eager" src="https://moviehub24.github.io/ads/" scrolling="no" height="300px"></iframe>
+        // Add an event listener for webAppDataChanged for debugging
+        Telegram.WebApp.onEvent('webAppDataChanged', function(event) {
+          console.log('webAppDataChanged event:', event);
+        });
 
-        <div class="info-section">
-            <h4>STEPS TO DOWNLOAD</h4>
-            <p>
-                <ol>
-                    <li>CLICK ON any button 480p/720p/1080p</li>
-                    <li>THEN CLICK ON DOWNLOAD</li>
-                    <li>NOW YOU OPEN IN TELEGRAM BOT</li>
-                    <li>FIRST JOIN "CHANNEL 1"</li>
-                    <li>Start BOT</li>
-                    <li>BOT SEND YOU YOUR MOVIE</li>
-                    <li>DOWNLOAD YOUR MOVIE</li>
-                </ol>
-            </p>
-        </div>
+        // Log the initDataUnsafe for debugging
+        console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);
 
-        <iframe loading="eager" src="https://moviehub24.github.io/ads/" scrolling="no" height="300px"></iframe>
-
-        <script type='text/javascript' src='//pl25102696.profitablecpmrate.com/b2/17/9f/b2179f738a9487c76a124a6433120123.js'></script>
-
-        <div class="info-section">
-            <h4>Screenshot preview</h4>
-        </div>
-
-        <div class="screenshot-grid">
-            <img loading="lazy" src="6.jpg" alt="Screenshot 1">
-            <img loading="lazy" src="2.jpg" alt="Screenshot 2">
-            <img loading="lazy" src="3.jpg" alt="Screenshot 3">
-            <img loading="lazy" src="4.jpg" alt="Screenshot 4">
-            <img loading="lazy" src="5.jpg" alt="Screenshot 5">
-        </div>
-
-        <iframe loading="eager" src="https://moviehub24.github.io/ads/" scrolling="no" height="300px"></iframe>
-
-        <div class="info-section">
-            <h4>----->Download Link<-----</h4>
-        </div>
-
-        <button onclick="window.location.href='link.html'">480p</button>
-        <button onclick="window.location.href='link.html'">720p</button>
-        <button onclick="window.location.href='link.html'">1080p</button>
-
-        <div class="info-section">
-            <h4>How To Download</h4>
-        </div>
-
-        <iframe loading="eager" src="https://moviehub24.github.io/ads/" scrolling="no" height="300px"></iframe>
-
-        <iframe loading="eager" src="https://moviehub24.github.io/video/" scrolling="no" height="200px"></iframe>
-    </div>
+    </script>
 </body>
 </html>
