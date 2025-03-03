@@ -36,16 +36,22 @@
     <button id="forwardBtn">🍿 Forward Movie</button>
 
     <script>
-        // Function to extract query parameters
-        document.getElementById("forwardButton").addEventListener("click", () => {
-    if (window.Telegram && Telegram.WebApp) {
-        const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
-        const videoId = localStorage.getItem("selectedVideoId");  // Get stored video ID
-        const qualityChannelId = localStorage.getItem("selectedQualityChannelId"); // Get quality channel ID
+        console.log("🚀 Mini App Loaded");
 
-        console.log("User ID:", userId);
-        console.log("Video ID:", videoId);
-        console.log("Quality Channel ID:", qualityChannelId);
+// Attach the event listener correctly
+document.getElementById("forwardBtn").addEventListener("click", () => {
+    console.log("📌 Forward button clicked");
+
+    if (window.Telegram && Telegram.WebApp) {
+        console.log("✅ Telegram WebApp detected");
+
+        const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+        const videoId = localStorage.getItem("selectedVideoId");  
+        const qualityChannelId = localStorage.getItem("selectedQualityChannelId");
+
+        console.log("🔍 User ID:", userId);
+        console.log("🎬 Video ID:", videoId);
+        console.log("📡 Quality Channel ID:", qualityChannelId);
 
         if (!userId || !videoId || !qualityChannelId) {
             alert("❌ Error: Missing movie data. Please try again.");
@@ -58,17 +64,14 @@
             qualityChannelId: qualityChannelId
         });
 
-        console.log("Sending Data:", requestData);
+        console.log("📤 Sending Data:", requestData);
         Telegram.WebApp.sendData(requestData);
         alert("✅ Movie request sent to the bot!");
     } else {
         alert("❌ Telegram WebApp is not available!");
     }
 });
-
-        // Initialize Telegram Mini App
-      Telegram.WebApp.ready();
-    </script>
+</script>
 
 </body>
 </html>
