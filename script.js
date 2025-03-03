@@ -15,7 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 if (response.ok) {
-                    Telegram.WebApp.close();
+                    // 🔹 Automatically Redirect Without Prompt
+                    window.location.href = `tg://resolve?domain=your_bot&start=${movieName}_${quality}`;
+
+                    
+                    // Optional: If using a web URL instead
+                    // window.location.href = `https://yourmoviehost.com/watch?movie=${movieName}&quality=${quality}`;
                 } else {
                     alert("Error sending request.");
                 }
