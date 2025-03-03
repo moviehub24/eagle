@@ -3,75 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forward Your Movie</title>
+    <title>Movie Quality Selector</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #181818;
-            color: white;
-            padding: 20px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 80%;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <h2>🎥 Forward Your Movie</h2>
-    <p>Click the button below to send your movie request to the bot.</p>
-
-    <button id="forwardBtn">🍿 Forward Movie</button>
-
-    <script>
-        console.log("🚀 Mini App Loaded");
-
-// Attach the event listener correctly
-document.getElementById("forwardBtn").addEventListener("click", () => {
-    console.log("📌 Forward button clicked");
-
-    if (window.Telegram && Telegram.WebApp) {
-        console.log("✅ Telegram WebApp detected");
-
-        const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
-        const videoId = localStorage.getItem("selectedVideoId");  
-        const qualityChannelId = localStorage.getItem("selectedQualityChannelId");
-
-        console.log("🔍 User ID:", userId);
-        console.log("🎬 Video ID:", videoId);
-        console.log("📡 Quality Channel ID:", qualityChannelId);
-
-        if (!userId || !videoId || !qualityChannelId) {
-            alert("❌ Error: Missing movie data. Please try again.");
-            return;
-        }
-
-        const requestData = JSON.stringify({
-            userId: userId,
-            videoId: videoId,
-            qualityChannelId: qualityChannelId
-        });
-
-        console.log("📤 Sending Data:", requestData);
-        Telegram.WebApp.sendData(requestData);
-        alert("✅ Movie request sent to the bot!");
-    } else {
-        alert("❌ Telegram WebApp is not available!");
-    }
-});
-</script>
-
+    <h2>Select Quality</h2>
+    <button class="quality-btn" data-quality="480p">480p</button>
+    <button class="quality-btn" data-quality="720p">720p</button>
+    <button class="quality-btn" data-quality="1080p">1080p</button>
+    <script src="script.js"></script>
 </body>
 </html>
