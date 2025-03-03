@@ -3,18 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Mini App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Movie Forwarder</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #222;
+            color: white;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: gray;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎬 Movie Hub</h1>
-        <p id="movie-info">Loading...</p>
-        <video id="video-player" controls></video>
-        <button id="close-btn">Close App</button>
-    </div>
+    <h2>🎥 Forward Your Movie</h2>
+    <p>Click the button below to send your movie request to the bot.</p>
+    <button id="forwardBtn">📤 Forward Movie</button>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // ✅ Initialize Telegram Web App
+        let tg = window.Telegram.WebApp;
+        tg.expand();  // Expands full screen
+
+        // ✅ Extract user data from URL parameters (set by bot)
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+        const videoId = urlParams.get('videoId');
+        const qualityChannelId = urlParams.get('qualityChannelId');
+
+        // ✅ Forward button logic
+        document.getElementById("forwardBtn").addEventListener("click", function () {
+            if (userId && videoId && qualityChannelId) {
+                tg.sendData(JSON.stringify({ userId, videoId, qualityChannelId })); // Sends data back to bot
+                tg.close(); // Closes mini app
+            } else {
+                alert("Error: Missing movie data. Please try again.");
+            }
+        });
+    </script>
 </body>
 </html>
