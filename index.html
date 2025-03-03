@@ -1,63 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Forward Video</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-
-        #forwardButton {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #0088cc;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        #message {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+<title>Image Upload and Download</title>
 </head>
 <body>
-    <h1>Forward Video</h1>
-    <button id="forwardButton">Forward</button>
-    <div id="message"></div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-        const forwardButton = document.getElementById('forwardButton');
-        const messageDiv = document.getElementById('message');
+<h1>Image Upload and Download</h1>
 
-        forwardButton.addEventListener('click', () => {
-            const data = Telegram.WebApp.initDataUnsafe;
-            const parsedData = JSON.parse(data.web_app_data);
+<input type="file" id="imageUpload" accept="image/*" multiple>
 
-            Telegram.WebApp.sendData(JSON.stringify({
-                userId: parsedData.userId,
-                videoId: parsedData.videoId,
-                qualityChannelId: parsedData.qualityChannelId,
-            }));
+<script>
+  const imageUpload = document.getElementById('imageUpload');
+  let imageCount = 1; // Initialize image counter
 
-            messageDiv.textContent = 'Forward request sent!';
+  imageUpload.addEventListener('change', (event) => {
+    const files = event.target.files;
 
-            // Optional: Disable the button after click
-            forwardButton.disabled = true;
-        });
+    if (files && files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
 
-        // Add an event listener for webAppDataChanged for debugging
-        Telegram.WebApp.onEvent('webAppDataChanged', function(event) {
-          console.log('webAppDataChanged event:', event);
-        });
+        reader.onload = (e) => {
+          const base64Image = e.target.result;
+          const newFilename = `${imageCount}.jpg`; // Use counter for filename
+          imageCount++; // Increment for the next image
 
-        // Log the initDataUnsafe for debugging
-        console.log('initDataUnsafe:', Telegram.WebApp.initDataUnsafe);
+          // Create download link immediately
+          const link = document.createElement('a');
+          link.href = base64Image;
+          link.download = newFilename;
+          link.textContent = `Download ${newFilename}`;
+          document.body.appendChild(link);
+          document.body.appendChild(document.createElement('br')); // Add line break
 
-    </script>
+        };
+
+        reader.readAsDataURL(file);
+      }
+    } else {
+      console.log("No files selected.");
+    }
+  });
+
+
+</script>
+
 </body>
 </html>
+
