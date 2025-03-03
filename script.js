@@ -1,33 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const movieInfo = document.getElementById("movie-info");
-    const videoPlayer = document.getElementById("video-player");
-    const closeButton = document.getElementById("close-btn");
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("user_id");
+    const movieName = urlParams.get("movie");
 
-    if (window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+    document.querySelectorAll(".quality-btn").forEach((button) => {
+        button.addEventListener("click", async () => {
+            const quality = button.getAttribute("data-quality");
 
-        console.log("Telegram Web App Data:", tg.initDataUnsafe); // Debugging
+            try {
+                const response = await fetch("https://yourdomain.com/api/selection", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId, movieName, quality }),
+                });
 
-        if (tg.initDataUnsafe && tg.initDataUnsafe.web_app_data) {
-            const data = JSON.parse(tg.initDataUnsafe.web_app_data);
-            console.log("Received Data:", data); // Debugging
-
-            if (data.videoId && data.qualityChannelId) {
-                movieInfo.textContent = `🎥 Video ID: ${data.videoId} (Quality: ${data.qualityChannelId})`;
-                videoPlayer.src = `https://cdn.example.com/videos/${data.videoId}.mp4`; // Update with actual URL
-                videoPlayer.style.display = "block";
-            } else {
-                movieInfo.textContent = "⚠️ Missing video data!";
+                if (response.ok) {
+                    Telegram.WebApp.close();
+                } else {
+                    alert("Error sending request.");
+                }
+            } catch (error) {
+                console.error("Request failed:", error);
+                alert("Network error.");
             }
-        } else {
-            movieInfo.textContent = "No video data found!";
-        }
-
-        closeButton.addEventListener("click", () => {
-            tg.close();
         });
-    } else {
-        movieInfo.textContent = "⚠️ Telegram WebApp not available!";
-    }
+    });
 });
