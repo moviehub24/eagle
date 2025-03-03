@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const movieInfo = document.getElementById("movie-info");
     const videoPlayer = document.getElementById("video-player");
@@ -7,14 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
-        tg.expand();  // Expand app to full screen
+        tg.expand();
+
+        console.log("Telegram Web App Data:", tg.initDataUnsafe); // Debugging
 
         if (tg.initDataUnsafe && tg.initDataUnsafe.web_app_data) {
             const data = JSON.parse(tg.initDataUnsafe.web_app_data);
-            const { videoId, qualityChannelId } = data;
+            console.log("Received Data:", data); // Debugging
 
-            movieInfo.textContent = `🎥 Video ID: ${videoId} (Quality: ${qualityChannelId})`;
-            videoPlayer.src = `https://cdn.example.com/videos/${videoId}.mp4`; // Replace with actual CDN URL
+            if (data.videoId && data.qualityChannelId) {
+                movieInfo.textContent = `🎥 Video ID: ${data.videoId} (Quality: ${data.qualityChannelId})`;
+                videoPlayer.src = `https://cdn.example.com/videos/${data.videoId}.mp4`; // Update with actual URL
+                videoPlayer.style.display = "block";
+            } else {
+                movieInfo.textContent = "⚠️ Missing video data!";
+            }
         } else {
             movieInfo.textContent = "No video data found!";
         }
